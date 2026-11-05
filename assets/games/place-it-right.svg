@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff8a3d"/>
+      <stop offset="1" stop-color="#d9480f"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff3b0"/>
+      <stop offset="1" stop-color="#f59f00"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="url(#bg)"/>
+  <rect x="14" y="22" width="100" height="92" rx="18" fill="#000" opacity="0.18"/>
+  <rect x="14" y="18" width="100" height="92" rx="18" fill="#fffaf1"/>
+  <polygon points="64,34 72.5,52 92,54 77.5,67 81.5,86 64,76.5 46.5,86 50.5,67 36,54 55.5,52" fill="#f59f00" opacity="0.28" stroke="#e8890c" stroke-width="3" stroke-linejoin="round"/>
+  <g transform="translate(6 -8)">
+    <polygon points="64,38 72.5,56 92,58 77.5,71 81.5,90 64,80.5 46.5,90 50.5,71 36,58 55.5,56" fill="#000" opacity="0.18" transform="translate(0 6)"/>
+    <polygon points="64,38 72.5,56 92,58 77.5,71 81.5,90 64,80.5 46.5,90 50.5,71 36,58 55.5,56" fill="url(#gold)" stroke="#b35c00" stroke-width="3" stroke-linejoin="round"/>
+    <ellipse cx="58" cy="54" rx="9" ry="4.5" fill="#fff" opacity="0.6" transform="rotate(-25 58 54)"/>
+  </g>
+</svg>

@@ -3,34 +3,344 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SparkLogic by Enigvra Studio</title>
-  <meta name="description" content="SparkLogic is a neon circuit logic puzzle for Android. Trace the circuit, light every bulb.">
+  <title>Enigvra Studio</title>
+  <meta name="description" content="Enigvra Studio makes calm, fair, offline games for Android: Gate &amp; Go, Studio Tycoon, Cozy Rooms, Tiny Canvas, Last Outpost, Stickbot Brawl, Cut &amp; Drop, Unjam Lot, Place It Right and SparkLogic. Privacy policies for every game.">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon-192.png" sizes="192x192">
   <style>
-    :root { --bg: #05080c; --fg: #e8f6ff; --muted: #8aa0b0; --accent: #3ff0ff; }
-    body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
-    main { max-width: 640px; margin: 0 auto; padding: 56px 16px 40px; }
-    h1 { font-size: 2.2rem; letter-spacing: .06em; margin: 0 0 12px; }
-    h1 span { color: var(--accent); }
-    .muted { color: var(--muted); }
-    .cta { display: inline-block; margin: 20px 0; padding: 12px 22px; border: 1px solid var(--accent); border-radius: 8px; color: var(--accent); text-decoration: none; }
+    :root {
+      --bg: #f7f7fa; --fg: #17171c; --dim: #5a5a66; --rule: #e1e1e8;
+      --card: #ffffff; --accent: #0a6b78; --accent-ink: #ffffff;
+      --chip: #eef3f4; --warn: #9a5b00; --shadow: 0 1px 2px rgba(20, 20, 40, .06), 0 8px 24px rgba(20, 20, 40, .06);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0a0a0d; --fg: #ececf1; --dim: #9a9aa6; --rule: #25252d;
+        --card: #14141a; --accent: #40f2ff; --accent-ink: #001417;
+        --chip: #1b2326; --warn: #ffc46b; --shadow: none;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0a0a0d; --fg: #ececf1; --dim: #9a9aa6; --rule: #25252d;
+      --card: #14141a; --accent: #40f2ff; --accent-ink: #001417;
+      --chip: #1b2326; --warn: #ffc46b; --shadow: none;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body { margin: 0; background: var(--bg); color: var(--fg);
+      font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     a { color: var(--accent); }
-    footer { margin-top: 48px; padding-top: 20px; border-top: 1px solid #1b2a36; font-size: .9rem; color: var(--muted); }
+    .wrap { max-width: 68rem; margin: 0 auto; padding: 0 16px; }
+    header.top { display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 18px 0; border-bottom: 1px solid var(--rule); }
+    header.top img { height: 44px; width: auto; display: block; }
+    nav a { margin-left: 1.1rem; text-decoration: none; font-weight: 600; font-size: .95rem; }
+    header.top img.logo-dark { display: none; }
+    @media (prefers-color-scheme: dark) {
+      :root:not([data-theme="light"]) header.top img.logo-dark { display: block; }
+      :root:not([data-theme="light"]) header.top img.logo-light { display: none; }
+    }
+    :root[data-theme="dark"] header.top img.logo-dark { display: block; }
+    :root[data-theme="dark"] header.top img.logo-light { display: none; }
+    .hero { padding: 56px 0 28px; }
+    .hero h1 { font-size: clamp(1.9rem, 4.5vw, 2.8rem); line-height: 1.15; margin: 0 0 .6rem; letter-spacing: -.01em; }
+    .hero p { color: var(--dim); font-size: 1.1rem; max-width: 40rem; margin: 0; }
+    h2 { font-size: 1.45rem; margin: 48px 0 6px; }
+    .sub { color: var(--dim); margin: 0 0 20px; }
+    .featured { display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center;
+      background: var(--card); border: 1px solid var(--rule); border-radius: 18px; padding: 22px; box-shadow: var(--shadow); }
+    .featured h3 { margin: 0 0 4px; font-size: 1.35rem; letter-spacing: .06em; }
+    .featured p { margin: 0; color: var(--dim); }
+    .cta { display: inline-block; padding: 12px 20px; border-radius: 999px; background: var(--accent);
+      color: var(--accent-ink); text-decoration: none; font-weight: 700; white-space: nowrap; }
+    .games { list-style: none; padding: 0; margin: 0; display: grid; gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); }
+    .game { display: flex; gap: 16px; background: var(--card); border: 1px solid var(--rule);
+      border-radius: 18px; padding: 18px; box-shadow: var(--shadow); }
+    .game .icon { width: 72px; height: 72px; border-radius: 18px; flex: none; }
+    .game h3 { margin: 0; font-size: 1.15rem; }
+    .game p { margin: 0; }
+    .genre { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--dim); }
+    .tag { font-weight: 600; margin-top: 2px !important; }
+    .line { color: var(--dim); font-size: .93rem; margin-top: 6px !important; }
+    .chips { list-style: none; padding: 0; margin: 10px 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
+    .chips li { background: var(--chip); border-radius: 999px; padding: 2px 10px; font-size: .78rem; }
+    .links { margin-top: 10px !important; font-size: .9rem; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .soon { color: var(--dim); }
+    .policies { display: grid; gap: 10px; }
+    .policy { background: var(--card); border: 1px solid var(--rule); border-radius: 14px; padding: 0 18px; }
+    .policy summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between;
+      align-items: center; gap: 12px; padding: 14px 0; font-weight: 700; }
+    .policy summary::-webkit-details-marker { display: none; }
+    .policy summary::after { content: "+"; color: var(--accent); font-size: 1.3rem; line-height: 1; }
+    .policy[open] summary::after { content: "\2212"; }
+    .policy summary span:first-child { flex: 1; }
+    .pill { font-size: .75rem; font-weight: 600; background: var(--chip); border-radius: 999px; padding: 2px 10px; color: var(--accent); }
+    .pill.warn { color: var(--warn); }
+    .policy dl { margin: 0 0 6px; display: grid; grid-template-columns: 11rem 1fr; gap: 6px 16px; font-size: .94rem; }
+    .policy dt { color: var(--dim); }
+    .policy dd { margin: 0; }
+    .policy p { margin: 10px 0 16px; }
+    .note { background: var(--card); border: 1px solid var(--rule); border-left: 4px solid var(--accent);
+      border-radius: 12px; padding: 14px 18px; margin: 0 0 16px; font-size: .95rem; }
+    footer { margin-top: 56px; padding: 22px 0 40px; border-top: 1px solid var(--rule); color: var(--dim); font-size: .88rem; }
     footer p { margin: 6px 0; }
+    @media (max-width: 560px) {
+      nav a { margin-left: .7rem; font-size: .9rem; }
+      header.top img { height: 36px; }
+      .featured { grid-template-columns: 1fr; }
+      .policy dl { grid-template-columns: 1fr; gap: 2px; }
+      .policy dt { margin-top: 8px; }
+    }
   </style>
 </head>
 <body>
-  <main>
-    <h1>SPARK<span>LOGIC</span></h1>
-    <p>Trace the circuit. Light every bulb.</p>
-    <p class="muted">A neon circuit logic puzzle for Android. Read the wiring, plan your taps and restore the grid before your taps run out.</p>
-    <a class="cta" href="https://play.google.com/store/apps/details?id=com.bilalsafdar.sparklogic">Get SparkLogic on Google Play</a>
-    <p class="muted">1,000 campaign grids, five stages, the Daily Grid and Endless Surge. No account, no timers, no lives.</p>
+  <div class="wrap">
+    <header class="top">
+      <a href="/" aria-label="Enigvra Studio home">
+        <img class="logo-light" src="assets/enigvra-logo-light.svg" alt="Enigvra Studio" width="144" height="44">
+        <img class="logo-dark" src="assets/enigvra-logo-dark.svg" alt="Enigvra Studio" width="144" height="44">
+      </a>
+      <nav><a href="#games">Games</a><a href="#privacy">Privacy</a><a href="#contact">Contact</a></nav>
+    </header>
 
-    <footer>
+    <section class="hero">
+      <h1>Calm, fair games for Android.</h1>
+      <p>No energy bars, no wait timers, no accounts. Our games play offline, keep your progress on your phone, and never lock what you need to play behind a purchase.</p>
+    </section>
+
+    <section aria-labelledby="featured-h">
+      <h2 id="featured-h">On Google Play now</h2>
+      <p class="sub">Our neon circuit logic puzzle.</p>
+      <div class="featured" id="sparklogic">
+        <div>
+          <h3>SPARKLOGIC</h3>
+          <p>Trace the circuit. Light every bulb. 1,000 campaign grids, five stages, the Daily Grid and Endless Surge. No account, no timers, no lives. <a href="sparklogic/">More about SparkLogic</a> &middot; <a href="#privacy-spark-logic">Privacy</a></p>
+        </div>
+        <a class="cta" href="https://play.google.com/store/apps/details?id=com.bilalsafdar.sparklogic">Get it on Google Play</a>
+      </div>
+    </section>
+
+    <section id="games" aria-labelledby="games-h">
+      <h2 id="games-h">Our games</h2>
+      <p class="sub">Coming soon to Google Play. Every one plays offline with no ads; optional in-app purchases are made through Google Play.</p>
+      <ul class="games">
+      <li class="game" id="gate-and-go">
+        <img class="icon" src="assets/games/gate-and-go.png" alt="" width="72" height="72" loading="lazy">
+        <div class="body">
+          <p class="genre">Tycoon</p>
+          <h3>Gate &amp; Go</h3>
+          <p class="tag">Build your airport. Guide every plane.</p>
+          <p class="line">An airport tycoon where you also run the apron: draw a taxi route for every plane, sign airlines, grow three airports.</p>
+          <ul class="chips"><li>Offline</li><li>No ads</li><li>Optional in-app purchases</li></ul>
+          <p class="links"><span class="soon">Coming soon to Google Play</span> <a href="#privacy-gate-and-go">Privacy</a></p>
+        </div>
+      </li>
+      <li class="game" id="studio-tycoon">
+        <img class="icon" src="assets/games/studio-tycoon.png" alt="" width="72" height="72" loading="lazy">
+        <div class="body">
+          <p class="genre">Tycoon</p>
+          <h3>Studio Tycoon</h3>
+          <p class="tag">From a 1984 bedroom to a city tower.</p>
+          <p class="line">Run a game studio in a live low-poly 3D office: pitch, build, review, release, and beat four rival studios.</p>
+          <ul class="chips"><li>Offline</li><li>No ads</li><li>Optional in-app purchases</li></ul>
+          <p class="links"><span class="soon">Coming soon to Google Play</span> <a href="#privacy-studio-tycoon">Privacy</a></p>
+        </div>
+      </li>
+      <li class="game" id="cozy-rooms">
+        <img class="icon" src="assets/games/cozy-rooms.png" alt="" width="72" height="72" loading="lazy">
+        <div class="body">
+          <p class="genre">Design</p>
+          <h3>Cozy Rooms</h3>
+          <p class="tag">Design cozy homes for your clients.</p>
+          <p class="line">An offline isometric decorating game: declutter, unbox, place furniture and reveal the makeover. No timers, no judgement.</p>
+          <ul class="chips"><li>Offline</li><li>No ads</li><li>Optional in-app purchases</li></ul>
+          <p class="links"><span class="soon">Coming soon to Google Play</span> <a href="#privacy-cozy-rooms">Privacy</a></p>
+        </div>
+      </li>
+      <li class="game" id="tiny-canvas">
+        <img class="icon" src="assets/games/tiny-canvas.png" alt="" width="72" height="72" loading="lazy">
+        <div class="body">
+          <p class="genre">Creative</p>
+          <h3>Tiny Canvas</h3>
+          <p class="tag">Colour by number, join the stars, free draw.</p>
+          <p class="line">Over 1,000 pixel pictures and 1,153 Star Weave puzzles, a daily picture and a free-draw canvas. Calm and offline.</p>
+          <ul class="chips"><li>Offline</li><li>No ads</li><li>Optional in-app purchases</li></ul>
+          <p class="links"><span class="soon">Coming soon to Google Play</span> <a href="#privacy-tiny-canvas">Privacy</a></p>
+        </div>
+      </li>
+      <li class="game" id="last-outpost">
+        <img class="icon" src="assets/games/last-outpost.png" alt="" width="72" height="72" loading="lazy">
+        <div class="body">
+          <p class="genre">Action</p>
+          <h3>Last Outpost</h3>
+          <p class="tag">Hold the line.</p>
+          <p class="line">Soldier defence across 120 missions with turrets and traps, plus Conquest: a tower war on low-poly islands.</p>
+          <ul class="chips"><li>Offline</li><li>No ads</li><li>Optional in-app purchases</li></ul>
+          <p class="links"><span class="soon">Coming soon to Google Play</span> <a href="#privacy-last-outpost">Privacy</a></p>
+        </div>
+      </li>
+      <li class="game" id="stickbot-brawl">
+        <img class="icon" src="assets/games/stickbot-brawl.svg" alt="" width="72" height="72" loading="lazy">
+        <div class="body">
+          <p class="genre">Fighting</p>
+          <h3>Stickbot Brawl</h3>
+          <p class="tag">Beat every robot.</p>
+          <p class="line">Landscape 2.5D robot fights across two arenas: punch, kick, block, and win paint jobs for your bot.</p>
+          <ul class="chips"><li>Offline</li><li>No ads</li><li>Optional in-app purchases</li></ul>
+          <p class="links"><span class="soon">Coming soon to Google Play</span> <a href="#privacy-stickbot-brawl">Privacy</a></p>
+        </div>
+      </li>
+      <li class="game" id="cut-and-drop">
+        <img class="icon" src="assets/games/cut-and-drop.svg" alt="" width="72" height="72" loading="lazy">
+        <div class="body">
+          <p class="genre">Puzzle</p>
+          <h3>Cut &amp; Drop</h3>
+          <p class="tag">Cut the rope, drop the ball.</p>
+          <p class="line">1,200 hard rope-cutting physics levels, each proven winnable with three stars. Instant restart, no timer.</p>
+          <ul class="chips"><li>Offline</li><li>No ads</li><li>Optional in-app purchases</li></ul>
+          <p class="links"><span class="soon">Coming soon to Google Play</span> <a href="#privacy-cut-and-drop">Privacy</a></p>
+        </div>
+      </li>
+      <li class="game" id="unjam-lot">
+        <img class="icon" src="assets/games/unjam-lot.svg" alt="" width="72" height="72" loading="lazy">
+        <div class="body">
+          <p class="genre">Puzzle</p>
+          <h3>Unjam Lot</h3>
+          <p class="tag">Clear the jam, one car at a time.</p>
+          <p class="line">A flat, minimal parking-lot puzzle with a growing grid, unlimited undo and free hints.</p>
+          <ul class="chips"><li>Offline</li><li>No ads</li><li>Optional in-app purchases</li></ul>
+          <p class="links"><span class="soon">Coming soon to Google Play</span> <a href="#privacy-unjam-lot">Privacy</a></p>
+        </div>
+      </li>
+      <li class="game" id="place-it-right">
+        <img class="icon" src="assets/games/place-it-right.svg" alt="" width="72" height="72" loading="lazy">
+        <div class="body">
+          <p class="genre">Puzzle</p>
+          <h3>Place It Right</h3>
+          <p class="tag">Every piece has its place.</p>
+          <p class="line">Drag coloured pieces onto their outlines, earn mosaic tiles in daily quests and unlock new boards. Free, unlimited hints.</p>
+          <ul class="chips"><li>Offline</li><li>No ads</li><li>Optional in-app purchases</li></ul>
+          <p class="links"><span class="soon">Coming soon to Google Play</span> <a href="#privacy-place-it-right">Privacy</a></p>
+        </div>
+      </li>
+      </ul>
+    </section>
+
+    <section id="privacy" aria-labelledby="privacy-h">
+      <h2 id="privacy-h">Privacy</h2>
+      <p class="sub">The short version for each game. Every full policy, including our other apps, is at <a href="https://bilalsafdar4130.github.io/privacy-policies/">bilalsafdar4130.github.io/privacy-policies</a>.</p>
+      <div class="note">Our games have no accounts and send us nothing. When you buy something in a game, Google Play takes the payment under its own terms; we never see your card or billing details. Questions or a data request: <a href="mailto:bilalsafdar3014@gmail.com">bilalsafdar3014@gmail.com</a>.</div>
+      <div class="policies">
+      <details class="policy" id="privacy-gate-and-go">
+        <summary><span>Gate &amp; Go</span><span class="pill">No data collected</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings, stored <strong>only on your device</strong>. Nothing is sent to us.</dd>
+          <dt>Ads and analytics</dt><dd>None. No advertising SDK, no analytics, no advertising ID, no account.</dd>
+          <dt>Purchases</dt><dd>Optional, one-time, through <strong>Google Play Billing</strong> (Company Cash, Investor Deal, Every Livery). Google Play processes the payment; the game never sees your payment details. Everything for sale can also be earned by playing.</dd>
+          <dt>Delete your data</dt><dd>In the game: <em>Privacy &amp; data &rarr; Delete my data</em> (tap twice). Purchases stay with your Google account; <em>Restore purchases</em> brings them back.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/gate-and-go.html">Read the full Gate &amp; Go privacy policy</a></p>
+      </details>
+      <details class="policy" id="privacy-studio-tycoon">
+        <summary><span>Studio Tycoon</span><span class="pill">No data collected</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings, stored <strong>only on your device</strong>. Nothing is sent to us.</dd>
+          <dt>Ads and analytics</dt><dd>None. No advertising SDK, no analytics, no advertising ID, no account.</dd>
+          <dt>Purchases</dt><dd>Optional, one-time, through <strong>Google Play Billing</strong> (Angel Investor, Big Publisher Deal, Style Pack). Google Play processes the payment; the game never sees your payment details. Everything for sale can also be earned by playing.</dd>
+          <dt>Delete your data</dt><dd>In the game: <em>Privacy &amp; data &rarr; Delete my data</em> (tap twice). Purchases stay with your Google account; <em>Restore purchases</em> brings them back.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/studio-tycoon.html">Read the full Studio Tycoon privacy policy</a></p>
+      </details>
+      <details class="policy" id="privacy-cozy-rooms">
+        <summary><span>Cozy Rooms</span><span class="pill">No data collected</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings, stored <strong>only on your device</strong>. Nothing is sent to us.</dd>
+          <dt>Ads and analytics</dt><dd>None. No advertising SDK, no analytics, no advertising ID, no account.</dd>
+          <dt>Purchases</dt><dd>Optional, one-time, through <strong>Google Play Billing</strong> (Coin Pouch, Every Finish). Google Play processes the payment; the game never sees your payment details. Everything for sale can also be earned by playing.</dd>
+          <dt>Delete your data</dt><dd>In the game: <em>Privacy &amp; data &rarr; Delete my data</em> (tap twice). Purchases stay with your Google account; <em>Restore purchases</em> brings them back.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/cozy-rooms.html">Read the full Cozy Rooms privacy policy</a></p>
+      </details>
+      <details class="policy" id="privacy-tiny-canvas">
+        <summary><span>Tiny Canvas</span><span class="pill">No data collected</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings, stored <strong>only on your device</strong>. Nothing is sent to us.</dd>
+          <dt>Ads and analytics</dt><dd>None. No advertising SDK, no analytics, no advertising ID, no account.</dd>
+          <dt>Purchases</dt><dd>Optional, one-time, through <strong>Google Play Billing</strong> (Every Pack, Supporter Pack). Google Play processes the payment; the game never sees your payment details. Everything for sale can also be earned by playing.</dd>
+          <dt>Delete your data</dt><dd>In the game: <em>Privacy &amp; data &rarr; Delete my data</em> (tap twice). Purchases stay with your Google account; <em>Restore purchases</em> brings them back.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/tiny-canvas.html">Read the full Tiny Canvas privacy policy</a></p>
+      </details>
+      <details class="policy" id="privacy-last-outpost">
+        <summary><span>Last Outpost</span><span class="pill">No data collected</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings, stored <strong>only on your device</strong>. Nothing is sent to us.</dd>
+          <dt>Ads and analytics</dt><dd>None. No advertising SDK, no analytics, no advertising ID, no account.</dd>
+          <dt>Purchases</dt><dd>Optional, one-time, through <strong>Google Play Billing</strong> (Supply Crate, Supply Drop, Every Operator). Google Play processes the payment; the game never sees your payment details. Everything for sale can also be earned by playing.</dd>
+          <dt>Delete your data</dt><dd>In the game: <em>Privacy &amp; data &rarr; Delete my data</em> (tap twice). Purchases stay with your Google account; <em>Restore purchases</em> brings them back.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/last-outpost.html">Read the full Last Outpost privacy policy</a></p>
+      </details>
+      <details class="policy" id="privacy-stickbot-brawl">
+        <summary><span>Stickbot Brawl</span><span class="pill">No data collected</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings, stored <strong>only on your device</strong>. Nothing is sent to us.</dd>
+          <dt>Ads and analytics</dt><dd>None. No advertising SDK, no analytics, no advertising ID, no account.</dd>
+          <dt>Purchases</dt><dd>Optional, one-time, through <strong>Google Play Billing</strong> (Coin Bag, Coin Vault, Every Paint Job). Google Play processes the payment; the game never sees your payment details. Everything for sale can also be earned by playing.</dd>
+          <dt>Delete your data</dt><dd>In the game: <em>Privacy &amp; data &rarr; Delete my data</em> (tap twice). Purchases stay with your Google account; <em>Restore purchases</em> brings them back.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/stickbot-brawl.html">Read the full Stickbot Brawl privacy policy</a></p>
+      </details>
+      <details class="policy" id="privacy-cut-and-drop">
+        <summary><span>Cut &amp; Drop</span><span class="pill">No data collected</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings, stored <strong>only on your device</strong>. Nothing is sent to us.</dd>
+          <dt>Ads and analytics</dt><dd>None. No advertising SDK, no analytics, no advertising ID, no account.</dd>
+          <dt>Purchases</dt><dd>Optional, one-time, through <strong>Google Play Billing</strong> (Hints Anytime, Open Every Level, Supporter Pack). Google Play processes the payment; the game never sees your payment details. Everything for sale can also be earned by playing.</dd>
+          <dt>Delete your data</dt><dd>In the game: <em>Privacy &amp; data &rarr; Delete my data</em> (tap twice). Purchases stay with your Google account; <em>Restore purchases</em> brings them back.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/cut-and-drop.html">Read the full Cut &amp; Drop privacy policy</a></p>
+      </details>
+      <details class="policy" id="privacy-unjam-lot">
+        <summary><span>Unjam Lot</span><span class="pill">No data collected</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings, stored <strong>only on your device</strong>. Nothing is sent to us.</dd>
+          <dt>Ads and analytics</dt><dd>None. No advertising SDK, no analytics, no advertising ID, no account.</dd>
+          <dt>Purchases</dt><dd>Optional, one-time, through <strong>Google Play Billing</strong> (Coin Stack, Coin Tower, Every Colour). Google Play processes the payment; the game never sees your payment details. Everything for sale can also be earned by playing.</dd>
+          <dt>Delete your data</dt><dd>In the game: <em>Privacy &amp; data &rarr; Delete my data</em> (tap twice). Purchases stay with your Google account; <em>Restore purchases</em> brings them back.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/unjam-lot.html">Read the full Unjam Lot privacy policy</a></p>
+      </details>
+      <details class="policy" id="privacy-place-it-right">
+        <summary><span>Place It Right</span><span class="pill">No data collected</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings, stored <strong>only on your device</strong>. Nothing is sent to us.</dd>
+          <dt>Ads and analytics</dt><dd>None. No advertising SDK, no analytics, no advertising ID, no account.</dd>
+          <dt>Purchases</dt><dd>Optional, one-time, through <strong>Google Play Billing</strong> (Every Theme, Supporter Pack). Google Play processes the payment; the game never sees your payment details. Everything for sale can also be earned by playing.</dd>
+          <dt>Delete your data</dt><dd>In the game: <em>Privacy &amp; data &rarr; Delete my data</em> (tap twice). Purchases stay with your Google account; <em>Restore purchases</em> brings them back.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/place-it-right.html">Read the full Place It Right privacy policy</a></p>
+      </details>
+      <details class="policy" id="privacy-spark-logic">
+        <summary><span>SparkLogic</span><span class="pill warn">Ads &amp; analytics</span></summary>
+        <dl>
+          <dt>What it keeps</dt><dd>Progress and settings on your device.</dd>
+          <dt>Ads</dt><dd>Google AdMob, with Google's consent form in the EEA, UK and Switzerland. Change your choice in <em>Settings &rarr; About &amp; legal &rarr; Ads &rarr; Ad privacy settings</em>.</dd>
+          <dt>Analytics</dt><dd>Anonymous Firebase Analytics; switch it off in <em>Settings &rarr; About &amp; legal &rarr; Analytics</em>.</dd>
+          <dt>Purchases</dt><dd>Optional, through Google Play Billing (including <em>Ad-Free Forever</em>).</dd>
+          <dt>Delete your data</dt><dd><em>Settings &rarr; About &amp; legal &rarr; Privacy policy &rarr; Delete my data</em>.</dd>
+        </dl>
+        <p><a href="https://bilalsafdar4130.github.io/privacy-policies/spark-logic.html">Read the full SparkLogic privacy policy</a></p>
+      </details>
+      </div>
+    </section>
+
+    <footer id="contact">
       <p>Developed by Enigvra Studio. Enigvra Studio is the trading name of Bilal Safdar.</p>
-      <p>&copy; 2026 Bilal Safdar, trading as Enigvra Studio. All rights reserved. SparkLogic and its logo are trademarks of Bilal Safdar. Google Play is a trademark of Google LLC.</p>
-      <p><a href="https://bilalsafdar4130.github.io/privacy-policies/spark-logic.html">Privacy policy</a> &middot; <a href="mailto:bilalsafdar3014@gmail.com">bilalsafdar3014@gmail.com</a></p>
+      <p>Contact: <a href="mailto:bilalsafdar3014@gmail.com">bilalsafdar3014@gmail.com</a> &middot; <a href="https://bilalsafdar4130.github.io/privacy-policies/">All privacy policies</a></p>
+      <p>&copy; 2026 Bilal Safdar, trading as Enigvra Studio. All rights reserved. SparkLogic, Gate &amp; Go, Studio Tycoon, Cozy Rooms, Tiny Canvas, Last Outpost, Stickbot Brawl, Cut &amp; Drop, Unjam Lot, Place It Right, their icons and the Enigvra Studio name and logo are trademarks and works of Bilal Safdar. Google Play is a trademark of Google LLC.</p>
     </footer>
-  </main>
+  </div>
 </body>
 </html>
